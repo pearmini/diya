@@ -1,13 +1,31 @@
 import { load } from "js-yaml";
-import { create, interpolateGreys, scaleSequential, extent } from "d3";
+import {
+  create,
+  range,
+  sum,
+  schemeObservable10,
+  scaleOrdinal,
+  sort,
+  hsl,
+} from "d3";
 
 function isPlainObject(value) {
   return value && value.constructor === Object;
 }
 
 function compute(nodes, options, props, config, depth, cells) {
-  const { x, y, width, height, direction = "row" } = options;
-  const { padding = 10 } = config;
+  const { width: globalWidth, height: globalHeight } = config;
+  const {
+    x,
+    y,
+    width,
+    height,
+    direction = "row",
+    count,
+    flex: F = range(nodes.length).map(() => 1),
+  } = options;
+  const { padding = Math.min(globalWidth, globalHeight) * 0.02 } = config;
+  const mainCount = count || nodes.length;
 
   const [
     mainStartKey,
@@ -23,32 +41,58 @@ function compute(nodes, options, props, config, depth, cells) {
       ? ["x", "y", "width", "height", width, height, x, y]
       : ["y", "x", "height", "width", height, width, y, x];
 
-  let x0 = mainStart + padding;
-  const length = nodes.length;
-  const cellWidth = (mainSize - padding * (length + 1)) / length;
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const cellX = x0;
-    const cellY = crossStart + padding;
-    const cellHeight = crossSize - 2 * padding;
-    const cellName = isPlainObject(node) ? Object.keys(node)[0] : node;
-    const cellProps = props[cellName] || {};
-    const { direction } = cellProps;
-    const cell = {
-      [mainStartKey]: cellX,
-      [crossStartKey]: cellY,
-      [mainSizeKey]: cellWidth,
-      [crossSizeKey]: cellHeight,
-      title: cellName,
-      depth,
-      direction,
-    };
-    x0 += cellWidth + padding;
-    cells.push(cell);
-    if (typeof node !== "string") {
-      const children = node[cellName];
-      compute(children, cell, props, config, depth + 1, cells);
+  let y0 = crossStart + padding;
+  const crossCount = Math.ceil(nodes.length / mainCount);
+  const unitWidth = (mainSize - padding * (mainCount + 1)) / mainCount;
+  const totalWidth = unitWidth * nodes.length;
+  const totalHeight = crossSize - padding * (crossCount + 1);
+  const cellHeight = totalHeight / crossCount;
+  const totalFlex = sum(F);
+  for (let i = 0; i < crossCount; i++) {
+    let x0 = mainStart + padding;
+    for (let j = 0; j < mainCount; j++) {
+      const index = i * mainCount + j;
+      const node = nodes[index];
+      const hasChildren = typeof node !== "string";
+      if (!node) return;
+      const cellX = x0;
+      const cellY = y0;
+      const cellWidth = (totalWidth * (F[index] ?? 1)) / totalFlex;
+      const cellName = isPlainObject(node) ? Object.keys(node)[0] : node;
+      const cellProps = props[cellName] || {};
+      const { show = true, ...restCellProps } = cellProps;
+      const cell = {
+        [mainStartKey]: cellX,
+        [crossStartKey]: cellY,
+        [mainSizeKey]: cellWidth,
+        [crossSizeKey]: cellHeight,
+        leave: !hasChildren,
+        title: cellName,
+        depth,
+        ...restCellProps,
+      };
+      x0 += cellWidth + padding;
+      if (show) cells.push(cell);
+      if (hasChildren) {
+        const children = node[cellName];
+        const newOptions = Object.assign({}, cell);
+        if (!show) {
+          newOptions[mainStartKey] -= padding;
+          newOptions[mainSizeKey] += 2 * padding;
+          newOptions[crossStartKey] -= padding;
+          newOptions[crossSizeKey] += 2 * padding;
+        }
+        compute(
+          children,
+          newOptions,
+          props,
+          config,
+          show ? depth + 1 : depth,
+          cells
+        );
+      }
     }
+    y0 += cellHeight + padding;
   }
 }
 
@@ -67,9 +111,9 @@ export function render(code) {
 
   const cells = layout(options);
 
-  const color = scaleSequential(
-    extent(cells.map((d) => d.depth)),
-    interpolateGreys
+  const scaleColor = scaleOrdinal(
+    [0, ...sort(Array.from(new Set(cells.map((d) => d.depth))))],
+    ["#fff", ...schemeObservable10]
   );
 
   const svg = create("svg").attr("viewBox", `0 0 ${width} ${height}`);
@@ -83,7 +127,16 @@ export function render(code) {
   g.append("rect")
     .attr("width", (d) => d.width)
     .attr("height", (d) => d.height)
-    .attr("fill", (d) => color(d.depth));
+    .attr("fill", (d) => hsl(scaleColor(d.depth)).brighter(1.2))
+    .attr("stroke", (d) => scaleColor(d.depth));
+
+  g.filter((d) => d.leave)
+    .append("text")
+    .attr("x", (d) => d.width / 2)
+    .attr("y", (d) => d.height / 2)
+    .attr("text-anchor", "middle")
+    .attr("dominant-baseline", "middle")
+    .text((d) => d.title);
 
   return svg.node();
 }

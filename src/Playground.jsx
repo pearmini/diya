@@ -34,15 +34,20 @@ const defaultCode = `config:
   height: 480
 
 root:
-  - A:
-    - A0
-    - A1
-  - B
-  - C
+  - a
+  - a1:
+    - a11: [h, i, j, k]
+    - g
+  - a2: [l, m, n, o, p, q, r]
 
 props:
-  A:
+  root:
     direction: column
+  a1:
+    show: false
+    flex: [2, 1]
+  a11:
+    count: 2
 `;
 
 function defaultSize() {

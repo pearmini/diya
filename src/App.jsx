@@ -23,7 +23,7 @@ function App() {
   return (
     <Container>
       <Header>
-        <Title>ArchiMaker</Title>
+        <Title>Block++</Title>
       </Header>
       <Playground></Playground>
     </Container>
