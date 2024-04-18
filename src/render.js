@@ -1,13 +1,5 @@
 import { load } from "js-yaml";
-import {
-  create,
-  range,
-  sum,
-  schemeObservable10,
-  scaleOrdinal,
-  sort,
-  hsl,
-} from "d3";
+import { create, range, sum, schemeObservable10, scaleOrdinal, sort, hsl, range } from "d3";
 
 function isPlainObject(value) {
   return value && value.constructor === Object;
@@ -15,28 +7,12 @@ function isPlainObject(value) {
 
 function compute(nodes, options, props, config, depth, cells) {
   const { width: globalWidth, height: globalHeight } = config;
-  const {
-    x,
-    y,
-    width,
-    height,
-    direction = "row",
-    count,
-    flex: F = range(nodes.length).map(() => 1),
-  } = options;
+  const { x, y, width, height, direction = "row", count, flex: F0 = range(nodes.length).map(() => 1) } = options;
   const { padding = Math.min(globalWidth, globalHeight) * 0.02 } = config;
   const mainCount = count || nodes.length;
+  const F = range(nodes.length).map((i) => F0[i] ?? 1);
 
-  const [
-    mainStartKey,
-    crossStartKey,
-    mainSizeKey,
-    crossSizeKey,
-    mainSize,
-    crossSize,
-    mainStart,
-    crossStart,
-  ] =
+  const [mainStartKey, crossStartKey, mainSizeKey, crossSizeKey, mainSize, crossSize, mainStart, crossStart] =
     direction === "row"
       ? ["x", "y", "width", "height", width, height, x, y]
       : ["y", "x", "height", "width", height, width, y, x];
@@ -82,14 +58,7 @@ function compute(nodes, options, props, config, depth, cells) {
           newOptions[crossStartKey] -= padding;
           newOptions[crossSizeKey] += 2 * padding;
         }
-        compute(
-          children,
-          newOptions,
-          props,
-          config,
-          show ? depth + 1 : depth,
-          cells
-        );
+        compute(children, newOptions, props, config, show ? depth + 1 : depth, cells);
       }
     }
     y0 += cellHeight + padding;
@@ -104,8 +73,7 @@ function layout(options) {
   return cells;
 }
 
-export function render(code) {
-  const options = load(code);
+function renderJSON(options) {
   const { config } = options;
   const { width, height } = config;
 
@@ -113,7 +81,7 @@ export function render(code) {
 
   const scaleColor = scaleOrdinal(
     [0, ...sort(Array.from(new Set(cells.map((d) => d.depth))))],
-    ["#fff", ...schemeObservable10]
+    ["#fff", ...schemeObservable10],
   );
 
   const svg = create("svg").attr("viewBox", `0 0 ${width} ${height}`);
@@ -139,4 +107,9 @@ export function render(code) {
     .text((d) => d.title);
 
   return svg.node();
+}
+
+export function render(yaml) {
+  const options = load(yaml);
+  return renderJSON(options);
 }
