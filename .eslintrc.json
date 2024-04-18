@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:react/recommended", "eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended", "prettier"],
   "env": {
     "es2020": true,
     "node": true,
