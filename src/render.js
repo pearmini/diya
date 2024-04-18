@@ -1,14 +1,17 @@
 import { load } from "js-yaml";
-import { create, range, sum, schemeObservable10, scaleOrdinal, sort, hsl, range } from "d3";
+import { create, range, sum, schemeObservable10, scaleOrdinal, sort, hsl, hierarchy } from "d3";
 
 function isPlainObject(value) {
   return value && value.constructor === Object;
 }
 
-function compute(nodes, options, props, config, depth, cells) {
-  const { width: globalWidth, height: globalHeight } = config;
-  const { x, y, width, height, direction = "row", count, flex: F0 = range(nodes.length).map(() => 1) } = options;
-  const { padding = Math.min(globalWidth, globalHeight) * 0.02 } = config;
+function compute(node, dimensions) {
+  const nodes = node.children;
+  if (!nodes) return;
+
+  const { x, y, width, height } = dimensions;
+  const { direction = "row", count, flex: F0 = range(nodes.length).map(() => 1), padding } = node.data;
+
   const mainCount = count || nodes.length;
   const F = range(nodes.length).map((i) => F0[i] ?? 1);
 
@@ -24,65 +27,77 @@ function compute(nodes, options, props, config, depth, cells) {
   const totalHeight = crossSize - padding * (crossCount + 1);
   const cellHeight = totalHeight / crossCount;
   const totalFlex = sum(F);
+
   for (let i = 0; i < crossCount; i++) {
     let x0 = mainStart + padding;
     for (let j = 0; j < mainCount; j++) {
       const index = i * mainCount + j;
       const node = nodes[index];
-      const hasChildren = typeof node !== "string";
       if (!node) return;
+      const { data } = node;
       const cellX = x0;
       const cellY = y0;
       const cellWidth = (totalWidth * (F[index] ?? 1)) / totalFlex;
-      const cellName = isPlainObject(node) ? Object.keys(node)[0] : node;
-      const cellProps = props[cellName] || {};
-      const { show = true, ...restCellProps } = cellProps;
-      const cell = {
+      const dimensions = {
         [mainStartKey]: cellX,
         [crossStartKey]: cellY,
         [mainSizeKey]: cellWidth,
         [crossSizeKey]: cellHeight,
-        leave: !hasChildren,
-        title: cellName,
-        depth,
-        ...restCellProps,
       };
+      Object.assign(node, { dimensions });
+
       x0 += cellWidth + padding;
-      if (show) cells.push(cell);
-      if (hasChildren) {
-        const children = node[cellName];
-        const newOptions = Object.assign({}, cell);
-        if (!show) {
-          newOptions[mainStartKey] -= padding;
-          newOptions[mainSizeKey] += 2 * padding;
-          newOptions[crossStartKey] -= padding;
-          newOptions[crossSizeKey] += 2 * padding;
-        }
-        compute(children, newOptions, props, config, show ? depth + 1 : depth, cells);
+
+      const subdimensions = Object.assign({}, dimensions);
+      const { show } = data;
+      if (!show) {
+        subdimensions[mainStartKey] -= padding;
+        subdimensions[mainSizeKey] += 2 * padding;
+        subdimensions[crossStartKey] -= padding;
+        subdimensions[crossSizeKey] += 2 * padding;
       }
+      compute(node, subdimensions);
     }
     y0 += cellHeight + padding;
   }
 }
 
-function layout(options) {
-  const { config, root, props } = options;
+function layout(root, config) {
   const { width, height } = config;
-  const cells = [];
-  compute([{ root }], { x: 0, y: 0, width, height }, props, config, 0, cells);
-  return cells;
+  const dimensions = { x: 0, y: 0, width, height };
+  Object.assign(root, { dimensions });
+  compute(root, dimensions);
+}
+
+function tree(options) {
+  const { config, root: _root, props } = options;
+  const { width, height } = config;
+  const root = hierarchy({ root: _root }, (d) => {
+    if (typeof d === "string") return null;
+    return d[Object.keys(d)[0]];
+  });
+  root.each((d) => {
+    const { data } = d;
+    const key = isPlainObject(data) ? Object.keys(data)[0] : data;
+    const { title = key, padding = Math.min(width, height) * 0.02, show = true, ...restProps } = props[key] || {};
+    d.data = isPlainObject(data) ? data : {};
+    Object.assign(d.data, { key, title, padding, show, ...restProps });
+  });
+  return root;
 }
 
 function renderJSON(options) {
   const { config } = options;
   const { width, height } = config;
 
-  const cells = layout(options);
+  const root = tree(options);
+  layout(root, config);
 
-  const scaleColor = scaleOrdinal(
-    [0, ...sort(Array.from(new Set(cells.map((d) => d.depth))))],
-    ["#fff", ...schemeObservable10],
-  );
+  const cells = root.descendants().filter((d) => d.data.show);
+
+  const scaleColor = scaleOrdinal()
+    .domain(sort(Array.from(new Set(cells.map((d) => d.height)))))
+    .range(schemeObservable10);
 
   const svg = create("svg").attr("viewBox", `0 0 ${width} ${height}`);
 
@@ -90,21 +105,21 @@ function renderJSON(options) {
     .selectAll("g")
     .data(cells)
     .join("g")
-    .attr("transform", (d) => `translate(${d.x},${d.y})`);
+    .attr("transform", (d) => `translate(${d.dimensions.x},${d.dimensions.y})`);
 
   g.append("rect")
-    .attr("width", (d) => d.width)
-    .attr("height", (d) => d.height)
-    .attr("fill", (d) => hsl(scaleColor(d.depth)).brighter(1.2))
-    .attr("stroke", (d) => scaleColor(d.depth));
+    .attr("width", (d) => d.dimensions.width)
+    .attr("height", (d) => d.dimensions.height)
+    .attr("fill", (d) => (d.data.key === "root" ? "#fff" : hsl(scaleColor(d.height)).brighter(1.2)))
+    .attr("stroke", (d) => (d.data.key === "root" ? "#fff" : scaleColor(d.height)));
 
-  g.filter((d) => d.leave)
+  g.filter((d) => !d.children)
     .append("text")
-    .attr("x", (d) => d.width / 2)
-    .attr("y", (d) => d.height / 2)
+    .attr("x", (d) => d.dimensions.width / 2)
+    .attr("y", (d) => d.dimensions.height / 2)
     .attr("text-anchor", "middle")
     .attr("dominant-baseline", "middle")
-    .text((d) => d.title);
+    .text((d) => d.data.title);
 
   return svg.node();
 }
