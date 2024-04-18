@@ -1,10 +1,13 @@
+import Layout from "@theme/Layout";
 import { useState } from "react";
 import SplitPane from "react-split-pane";
 import styled from "styled-components";
 import MonacoEditor from "react-monaco-editor";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { render } from "./render";
+import { render } from "blockpp";
+
+// console.log(render)
 
 const Container = styled.div`
   background-color: #f6f8fa;
@@ -57,7 +60,7 @@ function defaultSize() {
   );
 }
 
-export function Playground() {
+export default function Editor() {
   const [leftSize, setLeftSize] = useState(defaultSize());
   const [code, setCode] = useState(defaultCode);
   const diagramRef = useRef(null);
@@ -82,29 +85,31 @@ export function Playground() {
   }, [code]);
 
   return (
-    <Container>
-      <SplitPane
-        split="vertical"
-        defaultSize={leftSize}
-        allowResize={true}
-        onChange={onResize}
-        height="100%"
-      >
-        <MonacoEditor
-          language="yaml"
-          width={leftSize}
-          options={{
-            tabSize: 2,
-            minimap: { enabled: false },
-            fontSize: 14,
-          }}
-          value={code}
-          onChange={onCodeChange}
-        />
-        <Right>
-          <Diagram ref={diagramRef}></Diagram>
-        </Right>
-      </SplitPane>
-    </Container>
+    <Layout>
+      <Container>
+        <SplitPane
+          split="vertical"
+          defaultSize={leftSize}
+          allowResize={true}
+          onChange={onResize}
+          height="100%"
+        >
+          <MonacoEditor
+            language="yaml"
+            width={leftSize}
+            options={{
+              tabSize: 2,
+              minimap: { enabled: false },
+              fontSize: 14,
+            }}
+            value={code}
+            onChange={onCodeChange}
+          />
+          <Right>
+            <Diagram ref={diagramRef}></Diagram>
+          </Right>
+        </SplitPane>
+      </Container>
+    </Layout>
   );
 }
