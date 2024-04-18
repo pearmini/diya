@@ -7,8 +7,6 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { render } from "blockpp";
 
-// console.log(render)
-
 const Container = styled.div`
   background-color: #f6f8fa;
   width: 100%;

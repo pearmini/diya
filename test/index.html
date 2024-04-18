@@ -1,0 +1,81 @@
+<style>
+  select {
+    display: block;
+  }
+</style>
+<script type="module">
+  import { load } from "js-yaml";
+  import * as diagrams from "./diagrams/index.js";
+  import * as bpp from "../src/index.js";
+
+  const select = createSelect(() => {
+    const { value } = select;
+    history.pushState({ value }, "", `?name=${value}`);
+    render();
+  });
+  const options = Object.keys(diagrams).map(createOption);
+  select.append(...options);
+  document.body.append(select);
+  document.body.style.background = "#f0f0f0";
+
+  const initialValue = new URL(location).searchParams.get("name");
+  if (diagrams[initialValue]) select.value = initialValue;
+
+  let preClear = null;
+  let preNode = null;
+  render();
+
+  function createSelect(onchange) {
+    const select = document.createElement("select");
+    select.style.height = "20px";
+    select.onchange = onchange;
+    document.onkeydown = (event) => {
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+        return;
+      }
+      switch (event.key) {
+        case "ArrowLeft": {
+          if (select.selectedIndex > 0) {
+            select.selectedIndex--;
+            select.onchange();
+          } else alert("This is the first test case.");
+          break;
+        }
+        case "ArrowRight": {
+          if (select.selectedIndex < select.options.length - 1) {
+            select.selectedIndex++;
+            select.onchange();
+          } else alert("This is the last test case.");
+          break;
+        }
+      }
+    };
+
+    return select;
+  }
+
+  function createOption(key) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    return option;
+  }
+
+  async function render() {
+    if (typeof preClear === "function") preClear();
+    if (isNode(preNode)) preNode.remove();
+    const yaml = diagrams[select.value];
+    const options = load(yaml);
+    preNode = bpp.render(yaml);
+    preNode.style.width = options.width ?? 640 + "px";
+    preNode.style.height = options.height ?? 480 + "px";
+    if (isNode(preNode)) {
+      document.body.appendChild(preNode);
+      preClear = preNode.clear;
+    }
+  }
+
+  function isNode(node) {
+    return node instanceof HTMLElement || node instanceof SVGElement;
+  }
+</script>

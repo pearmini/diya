@@ -1,0 +1,19 @@
+config:
+  width: 640
+  height: 480
+
+root:
+  - a
+  - a1:
+      - a11: [h, i, j, k]
+      - g
+  - a2: [l, m, n, o, p, q, r]
+
+props:
+  root:
+    direction: column
+  a1:
+    show: false
+    flex: [2, 1]
+  a11:
+    count: 2
