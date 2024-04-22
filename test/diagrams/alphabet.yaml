@@ -1,6 +1,7 @@
-config:
+layout:
   width: 640
-  height: 480
+  height: 640
+  padding: 10
 
 root:
   - a
@@ -10,10 +11,10 @@ root:
   - a2: [l, m, n, o, p, q, r]
 
 props:
-  root:
-    direction: column
   a1:
-    show: false
-    flex: [2, 1]
+    visible: false
   a11:
-    count: 2
+    wrap: 2
+    value: 2
+  g:
+    value: 1

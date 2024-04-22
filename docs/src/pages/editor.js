@@ -5,7 +5,7 @@ import styled from "styled-components";
 import MonacoEditor from "react-monaco-editor";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { render } from "blockpp";
+import { render } from "bppjs";
 
 const Container = styled.div`
   background-color: #f6f8fa;

@@ -1,5 +1,5 @@
 {
-  "name": "blockpp",
+  "name": "bppjs",
   "version": "0.1.0",
   "description": "Create block diagram with YAML.",
   "main": "src/index.js",
@@ -12,13 +12,14 @@
   "author": "https://github.com/pearmini/",
   "dependencies": {
     "d3": "^7.9.0",
+    "d3-treemap-flex": "^0.0.2",
     "js-yaml": "^4.1.0"
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^9.0.0",
+    "eslint": "^9.1.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5",
-    "vite": "^5.2.9"
+    "vite": "^5.2.10"
   }
 }
