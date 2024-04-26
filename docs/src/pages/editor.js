@@ -1,38 +1,16 @@
 import Layout from "@theme/Layout";
 import { useState } from "react";
 import SplitPane from "react-split-pane";
-import styled from "styled-components";
 import MonacoEditor from "react-monaco-editor";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { render } from "bppjs";
+import styles from "./editor.module.css";
 
-const Container = styled.div`
-  background-color: #f6f8fa;
-  width: 100%;
-  height: calc(100vh - 64px);
-  position: relative;
-`;
-
-const Right = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Diagram = styled.div`
-  width: 80%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const defaultCode = `config:
+const defaultCode = `layout:
   width: 640
   height: 480
+  padding: 10
 
 root:
   - a
@@ -42,20 +20,15 @@ root:
   - a2: [l, m, n, o, p, q, r]
 
 props:
-  root:
-    direction: column
   a1:
-    show: false
+    visible: false
     flex: [2, 1]
   a11:
-    count: 2
+    wrap: 2
 `;
 
 function defaultSize() {
-  return parseInt(
-    localStorage.getItem("splitPos") ?? document.body.clientWidth * 0.3,
-    10
-  );
+  return parseInt(localStorage.getItem("splitPos") ?? document.body.clientWidth * 0.3, 10);
 }
 
 export default function Editor() {
@@ -84,14 +57,8 @@ export default function Editor() {
 
   return (
     <Layout>
-      <Container>
-        <SplitPane
-          split="vertical"
-          defaultSize={leftSize}
-          allowResize={true}
-          onChange={onResize}
-          height="100%"
-        >
+      <div className={styles.container}>
+        <SplitPane split="vertical" defaultSize={leftSize} allowResize={true} onChange={onResize} height="100%">
           <MonacoEditor
             language="yaml"
             width={leftSize}
@@ -103,11 +70,11 @@ export default function Editor() {
             value={code}
             onChange={onCodeChange}
           />
-          <Right>
-            <Diagram ref={diagramRef}></Diagram>
-          </Right>
+          <div className={styles.right}>
+            <div className={styles.diagram} ref={diagramRef}></div>
+          </div>
         </SplitPane>
-      </Container>
+      </div>
     </Layout>
   );
 }
