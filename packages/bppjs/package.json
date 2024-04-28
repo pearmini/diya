@@ -1,0 +1,25 @@
+{
+  "name": "bppjs",
+  "version": "0.1.0",
+  "description": "Create block diagram with YAML.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "npm run test:lint && npm run test:format",
+    "test:lint": "eslint src test",
+    "test:format": "prettier --check src test"
+  },
+  "author": "https://github.com/pearmini/",
+  "dependencies": {
+    "d3": "^7.9.0",
+    "d3-treemap-flex": "^0.1.1",
+    "js-yaml": "^4.1.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "vite": "^5.2.10"
+  }
+}
