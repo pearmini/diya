@@ -13,8 +13,9 @@ root:
 props:
   a1:
     visible: false
+    flex: [2, 1]
   a11:
     wrap: 2
-    value: 2
-  g:
-    value: 1
+    label: group
+  a2:
+    label: false
