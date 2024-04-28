@@ -1,3 +1,4 @@
+export const alphabet = `
 layout:
   width: 640
   height: 640
@@ -19,3 +20,4 @@ props:
     label: group
   a2:
     label: false
+`;
