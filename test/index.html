@@ -5,13 +5,13 @@
   }
 </style>
 <script type="module">
-  import { load } from "js-yaml";
+  import {load} from "js-yaml";
   import * as diagrams from "./diagrams/index.js";
   import * as bpp from "../src/index.js";
 
   const select = createSelect(() => {
-    const { value } = select;
-    history.pushState({ value }, "", `?name=${value}`);
+    const {value} = select;
+    history.pushState({value}, "", `?name=${value}`);
     render();
   });
   const options = Object.keys(diagrams).map(createOption);

@@ -1,14 +1,14 @@
-import { load } from "js-yaml";
-import { create, hierarchy, treemap } from "d3";
-import { treemapFlex } from "d3-treemap-flex";
+import {load} from "js-yaml";
+import {create, hierarchy, treemap} from "d3";
+import {treemapFlex} from "d3-treemap-flex";
 
 function isPlainObject(value) {
   return value && value.constructor === Object;
 }
 
 function tree(options) {
-  const { root: _root, props } = options;
-  const root = hierarchy({ root: _root }, children);
+  const {root: _root, props} = options;
+  const root = hierarchy({root: _root}, children);
 
   root.each(data).each(flex);
 
@@ -18,11 +18,11 @@ function tree(options) {
   }
 
   function data(d) {
-    const { data } = d;
+    const {data} = d;
     const key = isPlainObject(data) ? Object.keys(data)[0] : data;
-    const { label = key, visible = true, ...restProps } = props[key] || {};
+    const {label = key, visible = true, ...restProps} = props[key] || {};
     d.data = isPlainObject(data) ? data : {};
-    Object.assign(d.data, { key, label, visible, ...restProps });
+    Object.assign(d.data, {key, label, visible, ...restProps});
   }
 
   function flex(d) {
@@ -45,8 +45,8 @@ function labelHeight(d) {
 }
 
 function renderJSON(options) {
-  const { layout } = options;
-  const { width, height, padding = 0, paddingTop = padding * 2 + labelHeight() } = layout;
+  const {layout} = options;
+  const {width, height, padding = 0, paddingTop = padding * 2 + labelHeight()} = layout;
 
   const labelX = (d) => (d.children ? 0 : (d.x1 - d.x0) / 2);
   const labelY = (d) => (d.children ? 0 : (d.y1 - d.y0) / 2);
@@ -54,7 +54,7 @@ function renderJSON(options) {
   const labelDominantBaseline = (d) => (d.children ? "middle" : "middle");
   const labelDx = (d) => (d.children ? padding : 0);
   const labelDy = (d) => (d.children ? paddingTop / 2 : 0);
-  const hasLabel = d => d.data.label && d.children && d.data.key !== "root";
+  const hasLabel = (d) => d.data.label && d.children && d.data.key !== "root";
 
   const root = treemap()
     .tile(treemapFlex())

@@ -1,1 +1,1 @@
-export { alphabet } from "./alphabet.yaml";
+export {alphabet} from "./alphabet.yaml";
