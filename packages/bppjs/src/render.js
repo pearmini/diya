@@ -6,8 +6,8 @@ function isPlainObject(value) {
   return value && value.constructor === Object;
 }
 
-function tree(options) {
-  const {root: _root, props} = options;
+function tree(config) {
+  const {root: _root, props} = config;
   const root = hierarchy({root: _root}, children);
 
   root.each(data).each(flex);
@@ -44,8 +44,9 @@ function labelHeight(d) {
   return 18;
 }
 
-function renderJSON(options) {
+function renderJSON(options, config) {
   const {layout} = options;
+  const {treemap: t = treemap()} = config;
   const {width, height, padding = 0, paddingTop = padding * 2 + labelHeight()} = layout;
 
   const labelX = (d) => (d.children ? 0 : (d.x1 - d.x0) / 2);
@@ -56,7 +57,7 @@ function renderJSON(options) {
   const labelDy = (d) => (d.children ? paddingTop / 2 : 0);
   const hasLabel = (d) => d.data.label && d.children && d.data.key !== "root";
 
-  const root = treemap()
+  const root = t
     .tile(treemapFlex())
     .size([width, height])
     .paddingInner(padding)
@@ -95,7 +96,7 @@ function renderJSON(options) {
   return svg.node();
 }
 
-export function render(yaml) {
+export function render(yaml, config = {}) {
   const options = load(yaml);
-  return renderJSON(options);
+  return renderJSON(options, config);
 }
