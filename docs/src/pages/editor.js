@@ -7,24 +7,26 @@ import { useRef } from "react";
 import { render } from "bppjs";
 import styles from "./editor.module.css";
 
-const defaultCode = `layout:
-  width: 640
-  height: 480
-  padding: 10
+const defaultCode = `width: 640
+height: 640
+padding: 10
 
-root:
+data:
   - a
   - a1:
-    - a11: [h, i, j, k]
-    - g
+      - a11: [h, i, j, k]
+      - g
   - a2: [l, m, n, o, p, q, r]
 
-props:
+config:
   a1:
     visible: false
     flex: [2, 1]
   a11:
     wrap: 2
+    label: group
+  a2:
+    label: false
 `;
 
 function defaultSize() {

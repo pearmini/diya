@@ -68,8 +68,8 @@
     const yaml = diagrams[select.value];
     const options = load(yaml);
     preNode = bpp.render(yaml);
-    preNode.style.width = options.layout.width ?? 640 + "px";
-    preNode.style.height = options.layout.height ?? 480 + "px";
+    preNode.style.width = options.width ?? 640 + "px";
+    preNode.style.height = options.height ?? 480 + "px";
     if (isNode(preNode)) {
       document.body.appendChild(preNode);
       preClear = preNode.clear;
