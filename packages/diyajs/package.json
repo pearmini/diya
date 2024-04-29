@@ -1,5 +1,5 @@
 {
-  "name": "bppjs",
+  "name": "diyajs",
   "version": "0.1.0",
   "description": "Create block diagram with YAML.",
   "main": "src/index.js",

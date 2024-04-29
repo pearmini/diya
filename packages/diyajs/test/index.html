@@ -7,7 +7,7 @@
 <script type="module">
   import {load} from "js-yaml";
   import * as diagrams from "./diagrams/index.js";
-  import * as bpp from "../src/index.js";
+  import * as diya from "../src/index.js";
 
   const select = createSelect(() => {
     const {value} = select;
@@ -67,7 +67,7 @@
     if (isNode(preNode)) preNode.remove();
     const yaml = diagrams[select.value];
     const options = load(yaml);
-    preNode = bpp.render(yaml);
+    preNode = diya.render(yaml);
     preNode.style.width = options.width ?? 640 + "px";
     preNode.style.height = options.height ?? 480 + "px";
     if (isNode(preNode)) {
