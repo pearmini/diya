@@ -4,7 +4,7 @@ import SplitPane from "react-split-pane";
 import MonacoEditor from "react-monaco-editor";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { render } from "bppjs";
+import { render } from "diyajs";
 import styles from "./editor.module.css";
 
 const defaultCode = `width: 640

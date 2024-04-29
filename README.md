@@ -1,3 +1,3 @@
-# BPP: Block Plus Plus
+# Diya
 
-Create block diagram with YAML.
+Plot block **di**agrams with **YA**ML.
