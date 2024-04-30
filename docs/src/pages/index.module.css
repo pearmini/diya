@@ -3,11 +3,17 @@
  * and scoped locally.
  */
 
+.heroContainer {
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
 .heroBanner {
   padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
+  background-color: #2c3136;
+  padding: 48px;
 }
 
 @media screen and (max-width: 996px) {
@@ -17,7 +23,82 @@
 }
 
 .buttons {
-  display: flex;
+  --ifm-button-size-multiplier: 1.6;
   align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.buttonSecondary {
+  margin: 20px 36px;
+}
+
+.buttonFirst {
+  color: #000;
+}
+
+.heroTagline {
+  font-size: 56px;
+  color: #fff;
+}
+
+.heroLogo {
+  float: right;
+  height: auto;
+  margin-top: 20px;
+  padding: 30px;
+  max-width: 280px;
+  max-width: 280px;
+  position: relative;
+}
+
+.heroLogoImage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.heroLogoBg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(90deg, #833ab4, #fd1d1d 50%, #fcb045);
+  filter: blur(68px);
+  transform: translate(-50%, -50%);
+}
+
+.heroTagline b {
+  color: #d8a63e;
+}
+
+.topBanner {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.topBannerTitle {
+  font-size: 54px;
+  margin-bottom: 0.4rem;
+}
+
+.topBannerTitleText {
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(90deg, #833ab4, #fd1d1d 50%, #fcb045);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.topBannerTitleText:hover {
+  border-bottom: 2px solid;
+  border-color: #9800ff;
 }
