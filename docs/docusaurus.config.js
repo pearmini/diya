@@ -131,7 +131,7 @@ const config = {
         //     ],
         //   },
         // ],
-        copyright: `Copyright © ${new Date().getFullYear()} Bairui SU. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Bairui SU. Built with <a href="https://docusaurus.io/" target="_blank">Docusaurus</a> and <a href="https://github.com/pearmini/genji" target="_blank">Markdown Genji.</a>`,
       },
       prism: {
         theme: prismThemes.github,

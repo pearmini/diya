@@ -14,13 +14,6 @@ function HomepageHeader() {
             <div className={styles.heroLogoBg}></div>
             <img src="/img/logo.svg" className={styles.heroLogoImage}></img>
           </div>
-          <div class={styles.topBannerTitle}>
-            🎉&nbsp;
-            <a class={styles.topBannerTitleText} href="/blog/releases/3.2">
-              Announcing &nbsp;Diya!
-            </a>
-            &nbsp;🥳
-          </div>
           <span>
             Plot block <b>di</b>agrams with <b>YA</b>ML, focus on{" "}
             <b>hierarchy</b>
@@ -48,13 +41,13 @@ function HomepageHeader() {
 function HomeAnnounce() {
   return (
     <div class={styles.topBanner}>
-      {/* <div class={styles.topBannerTitle}>
+      <div class={styles.topBannerTitle}>
         🎉&nbsp;
         <a class={styles.topBannerTitleText} href="/blog/releases/3.2">
           Announcing &nbsp;Diya!
         </a>
         &nbsp;🥳
-      </div> */}
+      </div>
     </div>
   );
 }
@@ -66,7 +59,7 @@ export default function Home() {
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />"
     >
-      {/* <HomeAnnounce /> */}
+      <HomeAnnounce />
       <HomepageHeader />
       <main>
         <HomepageFeatures />
