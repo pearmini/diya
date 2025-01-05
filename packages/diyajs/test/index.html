@@ -68,8 +68,12 @@
     const yaml = diagrams[select.value];
     const options = load(yaml);
     preNode = diya.render(yaml);
-    preNode.style.width = options.width ?? 640 + "px";
-    preNode.style.height = options.height ?? 480 + "px";
+    const viewBox = preNode.getAttribute("viewBox");
+    if (viewBox) {
+      const [x, y, width, height] = viewBox.split(" ").map(Number);
+      preNode.style.width = `${width}px`;
+      preNode.style.height = `${height}px`;
+    }
     if (isNode(preNode)) {
       document.body.appendChild(preNode);
       preClear = preNode.clear;

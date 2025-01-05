@@ -1,0 +1,14 @@
+<svg viewBox="0 0 50 10">
+  <g transform="translate(0.5,0.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">aaaa</text>
+  </g>
+  <g transform="translate(20.5,0.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">b</text>
+  </g>
+  <g transform="translate(40.5,0.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">cc</text>
+  </g>
+</svg>

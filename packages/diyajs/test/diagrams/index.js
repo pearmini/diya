@@ -1,1 +1,1 @@
-export {alphabet} from "./alphabet.js";
+export {simpleBlockDiagram, simpleBlockDiagram1} from "./simple-block-diagram.js";
