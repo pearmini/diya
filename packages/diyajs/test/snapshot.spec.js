@@ -5,7 +5,6 @@ import * as diagrams from "./diagrams";
 import beautify from "js-beautify";
 import {JSDOM} from "jsdom";
 import {render} from "../src";
-import {treemap} from "d3";
 
 function withJsdom(run) {
   return async () => {
@@ -22,7 +21,7 @@ function withJsdom(run) {
 }
 
 async function screenshot(path, yaml) {
-  const renderSSR = withJsdom(() => render(yaml, {treemap: treemap().round(true)}));
+  const renderSSR = withJsdom(() => render(yaml));
   const root = await renderSSR();
   const string = beautify.html(root.outerHTML, {
     indent_size: 2,
