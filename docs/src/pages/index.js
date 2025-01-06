@@ -15,7 +15,7 @@ function HomepageHeader() {
             <img src="/img/logo.svg" className={styles.heroLogoImage}></img>
           </div>
           <span>
-            Plot block <b>di</b>agrams with <b>YA</b>ML, focus on{" "}
+            Plot <b>interactive</b> block <b>di</b>agrams with <b>YA</b>ML, focus on{" "}
             <b>hierarchy</b>
           </span>
         </h1>

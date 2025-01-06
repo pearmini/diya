@@ -1,3 +1,3 @@
 # Diya
 
-Plot block **di**agrams with **YA**ML.
+Plot interactive block **di**agrams with **YA**ML.
