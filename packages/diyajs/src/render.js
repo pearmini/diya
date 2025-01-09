@@ -7,8 +7,8 @@ function isPlainObject(value) {
 }
 
 function tree(spec) {
-  const {root: r, config = {}} = spec;
-  const root = hierarchy({root: r}, children).each(bind);
+  const {nodes, config = {}} = spec;
+  const root = hierarchy({nodes}, children).each(bind);
 
   function children(d) {
     if (typeof d === "string") return null;
@@ -19,7 +19,7 @@ function tree(spec) {
     const {data} = d;
     const id = isPlainObject(data) ? Object.keys(data)[0] : data;
     const options = config[id] || {};
-    if (id === "root") options.visible ??= false;
+    if (id === "nodes") options.visible ??= false;
     const {label = id, visible = true, ...restConfig} = options;
     d.data = {id, label, visible, ...restConfig};
   }

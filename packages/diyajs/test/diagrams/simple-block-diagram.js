@@ -1,7 +1,7 @@
 export const simpleBlockDiagram = `
-root: [a, b, c]
+nodes: [a, b, c]
 `;
 
 export const simpleBlockDiagram1 = `
-root: [aaaa, b, cc]
+nodes: [aaaa, b, cc]
 `;
