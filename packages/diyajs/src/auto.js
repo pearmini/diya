@@ -9,40 +9,62 @@ export function auto(root, {padding = 5, margin = 10} = {}) {
       return;
     }
 
-    const {direction = "row", wrap = null} = d.data;
+    const {direction = "row", wrap = d.children.length, flex = d.children.map(() => 1)} = d.data;
     const maxWidth = Math.max(...d.children.map((c) => c.w));
     const maxHeight = Math.max(...d.children.map((c) => c.h));
 
+    let sizes = [];
+    if (direction === "row") {
+      const widths = d.children.map((c, i) => c.w * flex[i] + margin * (flex[i] - 1));
+      const maxIndex = widths.indexOf(Math.max(...widths));
+      const maxWidth = widths[maxIndex];
+      const step = (maxWidth + margin) / flex[maxIndex];
+      sizes = flex.map((f) => f * (step - margin));
+    } else {
+      const heights = d.children.map((c, i) => c.h * flex[i] + margin * (flex[i] - 1));
+      const maxIndex = heights.indexOf(Math.max(...heights));
+      const maxHeight = heights[maxIndex];
+      const step = (maxHeight + margin) / flex[maxIndex];
+      sizes = flex.map((f) => f * (step - margin));
+    }
+
     let x = 0;
     let y = 0;
+    let wrapCount = 0;
 
-    for (const child of d.children) {
+    for (let i = 0; i < d.children.length; i++) {
+      const child = d.children[i];
       child.x = x;
       child.y = y;
-      child.w = maxWidth;
-      child.h = maxHeight;
 
       if (direction === "row") {
-        x += maxWidth + margin;
-        if (wrap && x >= wrap * (maxWidth + margin)) {
+        child.w = sizes[i];
+        child.h = maxHeight;
+
+        x += child.w + margin;
+        if (++wrapCount >= wrap) {
           x = 0;
           y += maxHeight + margin;
+          wrapCount = 0;
         }
       } else {
-        y += maxHeight + margin;
-        if (wrap && y >= wrap * (maxHeight + margin)) {
+        child.h = sizes[i];
+        child.w = maxWidth;
+
+        y += child.h + margin;
+        if (++wrapCount >= wrap) {
           y = 0;
           x += maxWidth + margin;
+          wrapCount = 0;
         }
       }
     }
 
-    if (direction === "row") {
-      d.w = wrap ? Math.min(wrap, d.children.length) * (maxWidth + margin) - margin : x - margin;
-      d.h = wrap ? y + maxHeight : maxHeight;
-    } else {
-      d.w = wrap ? x + maxWidth : maxWidth;
-      d.h = wrap ? Math.min(wrap, d.children.length) * (maxHeight + margin) - margin : y - margin;
+    d.w = 0;
+    d.h = 0;
+    for (const child of d.children) {
+      d.w = Math.max(d.w, child.x + child.w);
+      d.h = Math.max(d.h, child.y + child.h);
     }
   });
 
