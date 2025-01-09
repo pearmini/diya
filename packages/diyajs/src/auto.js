@@ -9,38 +9,40 @@ export function auto(root, {padding = 5, margin = 10} = {}) {
       return;
     }
 
-    const {direction = "row"} = d.data;
+    const {direction = "row", wrap = null} = d.data;
+    const maxWidth = Math.max(...d.children.map((c) => c.w));
+    const maxHeight = Math.max(...d.children.map((c) => c.h));
+
+    let x = 0;
+    let y = 0;
+
+    for (const child of d.children) {
+      child.x = x;
+      child.y = y;
+      child.w = maxWidth;
+      child.h = maxHeight;
+
+      if (direction === "row") {
+        x += maxWidth + margin;
+        if (wrap && x >= wrap * (maxWidth + margin)) {
+          x = 0;
+          y += maxHeight + margin;
+        }
+      } else {
+        y += maxHeight + margin;
+        if (wrap && y >= wrap * (maxHeight + margin)) {
+          y = 0;
+          x += maxWidth + margin;
+        }
+      }
+    }
 
     if (direction === "row") {
-      const maxWidth = Math.max(...d.children.map((c) => c.w));
-      const maxHeight = Math.max(...d.children.map((c) => c.h));
-
-      let x = 0;
-      for (const child of d.children) {
-        child.x = x;
-        child.y = 0;
-        child.w = maxWidth;
-        child.h = maxHeight;
-        x += maxWidth + margin;
-      }
-
-      d.w = x - margin;
-      d.h = maxHeight;
+      d.w = wrap ? Math.min(wrap, d.children.length) * (maxWidth + margin) - margin : x - margin;
+      d.h = wrap ? y + maxHeight : maxHeight;
     } else {
-      const maxWidth = Math.max(...d.children.map((c) => c.w));
-      const maxHeight = Math.max(...d.children.map((c) => c.h));
-
-      let y = 0;
-      for (const child of d.children) {
-        child.x = 0;
-        child.y = y;
-        child.w = maxWidth;
-        child.h = maxHeight;
-        y += maxHeight + margin;
-      }
-
-      d.w = maxWidth;
-      d.h = y - margin;
+      d.w = wrap ? x + maxWidth : maxWidth;
+      d.h = wrap ? Math.min(wrap, d.children.length) * (maxHeight + margin) - margin : y - margin;
     }
   });
 

@@ -1,0 +1,18 @@
+<svg viewBox="0 0 30 50">
+  <g transform="translate(0.5,0.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">a</text>
+  </g>
+  <g transform="translate(0.5,20.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">b</text>
+  </g>
+  <g transform="translate(0.5,40.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">c</text>
+  </g>
+  <g transform="translate(20.5,0.5)">
+    <rect width="9" height="9" fill="#fff" stroke="#000"></rect>
+    <text x="5" y="5" text-anchor="middle" dominant-baseline="middle">d</text>
+  </g>
+</svg>
