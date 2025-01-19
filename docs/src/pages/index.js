@@ -15,21 +15,14 @@ function HomepageHeader() {
             <img src="/img/logo.svg" className={styles.heroLogoImage}></img>
           </div>
           <span>
-            Plot <b>interactive</b> block <b>di</b>agrams with <b>YA</b>ML, focus on{" "}
-            <b>hierarchy</b>
+            Plot <b>interactive</b> block <b>di</b>agrams with <b>YA</b>ML, focus on <b>hierarchy</b>
           </span>
         </h1>
         <div className={styles.buttons}>
-          <Link
-            className={clsx("button button--primary", styles.buttonFirst)}
-            to="/docs/intro"
-          >
+          <Link className={clsx("button button--primary", styles.buttonFirst)} to="/docs/intro">
             Get Started
           </Link>
-          <Link
-            className={clsx("button button--secondary", styles.buttonSecondary)}
-            to="/editor"
-          >
+          <Link className={clsx("button button--secondary", styles.buttonSecondary)} to="/editor">
             Try Online
           </Link>
         </div>
@@ -53,12 +46,9 @@ function HomeAnnounce() {
 }
 
 export default function Home() {
-  const { siteConfig } = useDocusaurusContext();
+  const {siteConfig} = useDocusaurusContext();
   return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
-    >
+    <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
       <HomeAnnounce />
       <HomepageHeader />
       <main>

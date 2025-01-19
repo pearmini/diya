@@ -1,13 +1,14 @@
 import Layout from "@theme/Layout";
-import { useState } from "react";
+import {useState} from "react";
 import SplitPane from "react-split-pane";
 import MonacoEditor from "react-monaco-editor";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { render } from "diyajs";
+import {useEffect} from "react";
+import {useRef} from "react";
+import {render} from "diya-js";
+import {simpleBlockDiagram} from "diya-examples";
 import styles from "./editor.module.css";
 
-const defaultCode = `root: [a, b, c]`;
+const defaultCode = simpleBlockDiagram.trim();
 
 function defaultSize() {
   return parseInt(localStorage.getItem("splitPos") ?? document.body.clientWidth * 0.3, 10);
@@ -46,7 +47,7 @@ export default function Editor() {
             width={leftSize}
             options={{
               tabSize: 2,
-              minimap: { enabled: false },
+              minimap: {enabled: false},
               fontSize: 14,
             }}
             value={code}
