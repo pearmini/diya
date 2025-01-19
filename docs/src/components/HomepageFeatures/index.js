@@ -4,34 +4,19 @@ import styles from "./styles.module.css";
 
 const FeatureList = [
   {
-    title: "Focus on Hierarchy",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and used to get your website up and running
-        quickly.
-      </>
-    ),
+    title: "Easy Block Diagrams",
+    // Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    description: <>Create clear and flexible block diagrams with customizable layouts and columns.</>,
   },
   {
-    title: "Easy to Modify",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your docs into the{" "}
-        <code>docs</code> directory.
-      </>
-    ),
+    title: "Customizable Styling",
+    // Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    description: <>Adjust block sizes, styles, and links for tailored visualizations.</>,
   },
   {
-    title: "Powered by React",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same
-        header and footer.
-      </>
-    ),
+    title: "Versatile Integration",
+    // Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    description: <>Design workflows and systems with seamless YAML-based configuration.</>,
   },
 ];
 

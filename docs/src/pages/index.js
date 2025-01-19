@@ -15,16 +15,16 @@ function HomepageHeader() {
             <img src="/img/logo.svg" className={styles.heroLogoImage}></img>
           </div>
           <span>
-            Plot <b>interactive</b> block <b>di</b>agrams with <b>YA</b>ML, focus on <b>hierarchy</b>
+            Plot block <b>di</b>agrams with <b>YA</b>ML, focus on <b>data</b> and <b>interactivity</b>
           </span>
         </h1>
         <div className={styles.buttons}>
-          <Link className={clsx("button button--primary", styles.buttonFirst)} to="/docs/intro">
-            Get Started
-          </Link>
-          <Link className={clsx("button button--secondary", styles.buttonSecondary)} to="/editor">
+          <Link className={clsx("button button--primary", styles.buttonFirst)} to="/editor">
             Try Online
           </Link>
+          {/* <Link className={clsx("button button--secondary", styles.buttonSecondary)} to="/editor">
+            Try Online
+          </Link> */}
         </div>
       </div>
     </header>
@@ -35,11 +35,16 @@ function HomeAnnounce() {
   return (
     <div class={styles.topBanner}>
       <div class={styles.topBannerTitle}>
-        🎉&nbsp;
+        {/* 🎉&nbsp;
         <a class={styles.topBannerTitleText} href="/blog/releases/3.2">
           Announcing &nbsp;Diya!
         </a>
-        &nbsp;🥳
+        &nbsp;🥳 */}
+        🚀 &nbsp;
+        <a class={styles.topBannerTitleText} href="https://github.com/pearmini/diya">
+          Work in progress!
+        </a>
+        &nbsp; 🔥
       </div>
     </div>
   );
