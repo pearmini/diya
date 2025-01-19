@@ -1,5 +1,5 @@
 {
-  "name": "diyajs",
+  "name": "diya-js",
   "version": "0.1.0",
   "description": "Create block diagram with YAML.",
   "main": "src/index.js",
@@ -18,6 +18,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "diya-examples": "workspace:*",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "js-beautify": "^1.15.1",

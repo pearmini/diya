@@ -1,7 +1,7 @@
 import {describe, test, expect} from "vitest";
 import path from "path";
 import * as fs from "fs";
-import * as diagrams from "./diagrams";
+import * as diagrams from "diya-examples";
 import beautify from "js-beautify";
 import {JSDOM} from "jsdom";
 import {render} from "../src";
