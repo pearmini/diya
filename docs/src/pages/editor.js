@@ -1,14 +1,13 @@
 import Layout from "@theme/Layout";
-import {useState} from "react";
+import clsx from "clsx";
+import {useState, useMemo} from "react";
 import SplitPane from "react-split-pane";
 import MonacoEditor from "react-monaco-editor";
 import {useEffect} from "react";
 import {useRef} from "react";
 import {render} from "diya-js";
-import {simpleBlockDiagram} from "diya-examples";
+import * as examples from "diya-examples";
 import styles from "./editor.module.css";
-
-const defaultCode = simpleBlockDiagram.trim();
 
 function defaultSize() {
   return parseInt(localStorage.getItem("splitPos") ?? document.body.clientWidth * 0.3, 10);
@@ -16,23 +15,35 @@ function defaultSize() {
 
 export default function Editor() {
   const [leftSize, setLeftSize] = useState(defaultSize());
-  const [code, setCode] = useState(defaultCode);
   const diagramRef = useRef(null);
+  const keys = Object.keys(examples);
+  const [selectedKey, setSelectedKey] = useState("simpleBlockDiagram");
+  const [editorValue, setEditorValue] = useState(null);
+  const code = useMemo(() => editorValue ?? examples[selectedKey].trim(), [selectedKey, editorValue]);
 
   function onResize(size) {
     setLeftSize(size);
     localStorage.setItem("splitPos", size);
   }
 
-  function onCodeChange(code) {
-    setCode(code);
+  function onSelected(key) {
+    setSelectedKey(key);
+    setEditorValue(null);
+  }
+
+  function onEditorChange(value) {
+    setEditorValue(value);
   }
 
   useEffect(() => {
     try {
-      const node = render(code);
+      const svg = render(code);
       diagramRef.current.innerHTML = "";
-      diagramRef.current.appendChild(node);
+      diagramRef.current.appendChild(svg);
+
+      const [, , width, height] = svg.getAttribute("viewBox").split(" ");
+      diagramRef.current.style.width = `${width * 2}px`;
+      diagramRef.current.style.height = `${height * 2}px`;
     } catch (e) {
       console.error(e);
     }
@@ -41,22 +52,35 @@ export default function Editor() {
   return (
     <Layout>
       <div className={styles.container}>
-        <SplitPane split="vertical" defaultSize={leftSize} allowResize={true} onChange={onResize} height="100%">
-          <MonacoEditor
-            language="yaml"
-            width={leftSize}
-            options={{
-              tabSize: 2,
-              minimap: {enabled: false},
-              fontSize: 14,
-            }}
-            value={code}
-            onChange={onCodeChange}
-          />
-          <div className={styles.right}>
-            <div className={styles.diagram} ref={diagramRef}></div>
-          </div>
-        </SplitPane>
+        <div className={styles.list}>
+          {keys.map((key) => (
+            <div
+              key={key}
+              className={clsx(styles.item, selectedKey === key && styles.itemSelected)}
+              onClick={() => onSelected(key)}
+            >
+              {key}
+            </div>
+          ))}
+        </div>
+        <div className={styles.main}>
+          <SplitPane split="vertical" defaultSize={leftSize} allowResize={true} onChange={onResize} height="100%">
+            <MonacoEditor
+              language="yaml"
+              width={leftSize}
+              options={{
+                tabSize: 2,
+                minimap: {enabled: false},
+                fontSize: 14,
+              }}
+              value={code}
+              onChange={onEditorChange}
+            />
+            <div className={styles.right}>
+              <div className={styles.diagram} ref={diagramRef}></div>
+            </div>
+          </SplitPane>
+        </div>
       </div>
     </Layout>
   );

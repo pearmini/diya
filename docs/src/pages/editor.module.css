@@ -3,6 +3,35 @@
   width: 100%;
   height: calc(100vh - 64px);
   position: relative;
+  display: flex;
+}
+
+.list {
+  width: 15%;
+  padding-top: 5px;
+}
+
+.item {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 3px 5px 3px 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item:hover {
+  background-color: #e8e8e8;
+}
+
+.itemSelected {
+  background-color: #e8e8e8;
+  font-weight: bold;
+}
+
+.main {
+  width: 85%;
+  position: relative;
 }
 
 .right {
@@ -14,9 +43,6 @@
 }
 
 .diagram {
-  width: 80%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 10px;
+  box-sizing: content-box;
 }
